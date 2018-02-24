@@ -30,7 +30,7 @@ Display::Display() : Gamebuino_Meta::Image(80, 64, ColorMode::rgb565) {
 
 void Display::clear() {
 	Gamebuino_Meta::Image::fill(Color::white);
-	setCursors(0, 0);
+	setCursor(0, 0);
 }
 
 void Display::fillScreen() {

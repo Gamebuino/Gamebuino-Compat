@@ -52,21 +52,21 @@ void Gamebuino::getDefaultName(char* string) {
 }
 
 bool Gamebuino::update() {
-	Color c = display.color;
-	Color c2 = display.bgcolor;
+	Color c = display.color.c;
+	Color c2 = display.bgcolor.c;
 	bool u = Gamebuino_Meta::Gamebuino::update();
 	if (u) {
 		if (!display.persistence) {
 			display.clear();
 		}
-		display.color = c;
-		display.bgcolor = c2;
+		display.color.c = c;
+		display.bgcolor.c = c2;
 		return true;
 	}
 	return false;
 }
 
-void Gamebuino::titleScreen(const char* name, const uint8_t* logo) {
+void Gamebuino::titleScreen(const __FlashStringHelper* name, const uint8_t *logo) {
 	display.fontSize = 1;
 	display.persistence = false;
 	
@@ -87,7 +87,7 @@ void Gamebuino::titleScreen(const char* name, const uint8_t* logo) {
 			uint8_t lh = logo[1];
 			display.drawBitmap((display.width() - lw) / 2, (display.height() - lh) / 2, logo);
 		}
-		display.setCursors(0, 12);
+		display.setCursor(0, 12);
 		display.print(name);
 		
 		if ((frameCount % 32) < 20) {
@@ -98,7 +98,7 @@ void Gamebuino::titleScreen(const char* name, const uint8_t* logo) {
 			display.setColor(Color::brown);
 			display.fillRect(x - display.fontSize, y - display.fontSize, w + display.fontSize*2, h + display.fontSize);
 			display.setColor(Color::white);
-			display.setCursors(x, y);
+			display.setCursor(x, y);
 			display.print(msg);
 		}
 		
@@ -109,8 +109,16 @@ void Gamebuino::titleScreen(const char* name, const uint8_t* logo) {
 	}
 }
 
-void Gamebuino::titleScreen(const uint8_t* logo) {
-	titleScreen("", logo);
+void Gamebuino::titleScreen(const __FlashStringHelper* name){
+	titleScreen(name, 0);
+}
+
+void Gamebuino::titleScreen(const uint8_t* logo){
+	titleScreen(F(""), logo);
+}
+
+void Gamebuino::titleScreen(){
+	titleScreen(F(""));
 }
 
 }; // namespace Gamebuino_Compat

@@ -39,8 +39,10 @@ public:
 	Battery battery;
 	void getDefaultName(char* string);
 	bool update();
-	void titleScreen(const char* name, const uint8_t* logo = 0);
+	void titleScreen(const __FlashStringHelper* name, const uint8_t *logo);
+	void titleScreen(const __FlashStringHelper* name);
 	void titleScreen(const uint8_t* logo);
+	void titleScreen();
 };
 
 } // namespace Gamebuino_Compat
