@@ -121,6 +121,18 @@ void Gamebuino::titleScreen(){
 	titleScreen(F(""));
 }
 
+void Gamebuino::keyboard(char* text, uint8_t length) {
+	gui.keyboard("Please Enter:", text, length);
+}
+
+int8_t Gamebuino::menu(const char* const* items, uint8_t length) {
+	return gui.menu("Please Select:", (const char**)items, length);
+}
+
+void Gamebuino::popup(const char* text, uint8_t duration) {
+	gui.popup(text, duration);
+}
+
 }; // namespace Gamebuino_Compat
 
 Gamebuino gb;
