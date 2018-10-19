@@ -52,15 +52,12 @@ void Gamebuino::getDefaultName(char* string) {
 }
 
 bool Gamebuino::update() {
-	Color c = display.color.c;
-	Color c2 = display.bgcolor.c;
 	bool u = Gamebuino_Meta::Gamebuino::update();
 	if (u) {
 		if (!display.persistence) {
 			display.clear();
 		}
-		display.color.c = c;
-		display.bgcolor.c = c2;
+		display.setColor(Color::black);
 		return true;
 	}
 	return false;
@@ -70,15 +67,12 @@ void Gamebuino::titleScreen(const __FlashStringHelper* name, const uint8_t *logo
 	display.fontSize = 1;
 	display.persistence = false;
 	
-	const char* msg = "\x15 to start";
-	uint8_t w = display.fontWidth*strlen(msg)*display.fontSize;
-	uint8_t h = display.fontHeight*display.fontSize;
-	uint8_t x = (display.width() - w) / 2;
-	uint8_t y = (display.height() / 5) * 3 + h;
+	
+	Image buttonsIcons = Image(Gamebuino_Meta::buttonsIconsData);
+	
 	while(1) {
-		if (!update()) {
-			continue;
-		}
+		while (!update());
+		
 		display.clear();
 		display.setColor(Color::black);
 		display.drawBitmap(-2, 0, gamebuinoLogo);
@@ -90,19 +84,26 @@ void Gamebuino::titleScreen(const __FlashStringHelper* name, const uint8_t *logo
 		display.setCursor(0, 12);
 		display.print(name);
 		
-		if ((frameCount % 32) < 20) {
-			
-			display.setColor(Color::gray);
-			display.drawRect(x - display.fontSize*2, y - display.fontSize*2, w + display.fontSize*4, h + display.fontSize*3);
-			
-			display.setColor(Color::brown);
-			display.fillRect(x - display.fontSize, y - display.fontSize, w + display.fontSize*2, h + display.fontSize);
-			display.setColor(Color::white);
-			display.setCursor(x, y);
-			display.print(msg);
+		//blinking border
+		if ((frameCount % 8) >= 4) {
+			display.setColor(BROWN);
+			display.drawRect(0, 0, display.width(), display.height());
 		}
 		
-		if (gb.buttons.pressed(Button::a)) {
+		//blinking A button icon
+		if((frameCount%8) >= 4){
+			buttonsIcons.setFrame(1); //button A pressed
+		} else {
+			buttonsIcons.setFrame(0); //button A released
+		}
+		uint8_t scale = display.width() == 80 ? 1 : 2;
+		uint8_t w = buttonsIcons.width() * scale;
+		uint8_t h = buttonsIcons.height() * scale;
+		uint8_t x = display.width() - w;
+		uint8_t y = display.height() - h;
+		display.drawImage(x, y, buttonsIcons, w, h);
+		
+		if (buttons.pressed(Button::a)) {
 			sound.playOK();
 			break;
 		}
