@@ -47,6 +47,7 @@ public:
 	void keyboard(char* text, uint8_t length);
 	int8_t menu(const char* const* items, uint8_t length);
 	void popup(const char* text, uint8_t duration);
+	void popup(const __FlashStringHelper* text, uint8_t duration);
 };
 
 } // namespace Gamebuino_Compat

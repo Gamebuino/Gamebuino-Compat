@@ -134,6 +134,10 @@ void Gamebuino::popup(const char* text, uint8_t duration) {
 	gui.popup(text, duration);
 }
 
+void Gamebuino::popup(const __FlashStringHelper* text, uint8_t duration) {
+	gui.popup((const char*)text, duration);
+}
+
 }; // namespace Gamebuino_Compat
 
 Gamebuino gb;
